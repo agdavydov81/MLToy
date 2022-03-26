@@ -1,0 +1,22 @@
+<resources>
+    <string name="appName">Test001</string>
+    <string name="classificationDecision">Classification decision</string>
+    <string name="addClass">Add new class</string>
+    <string name="className">Class name</string>
+    <string name="classDescription">Class description</string>
+    <string name="color">Color</string>
+    <string name="label">Label</string>
+    <string name="selectClassLabel">Select class label</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
+    <string name="classInfoPoints">Class with %1$d points.</string>
+    <string name="classInfoDimension">Dimension %1$d min:%2$f, max:%3$f, mean:%4$f, std:%d$f.</string>
+    <string name="classColor">Color: #%1$06X</string>
+    <string name="classLabel">Label: %1$s</string>
+    <string name="deleteClassConfirm">Are you sure to delete this class?</string>
+    <string name="cross">Cross</string>
+    <string name="circle">Circle</string>
+    <string name="plus">Plus</string>
+    <string name="rhombus">Rhombus</string>
+    <string name="square">Square</string>
+</resources>

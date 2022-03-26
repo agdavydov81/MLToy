@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/class_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/classDescription"
+        android:textColorHint="#757575" />
+
+    <EditText
+        android:id="@+id/class_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/className"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColorHint="#757575" />
+
+    <Button
+        android:id="@+id/class_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/color"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/class_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/class_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/class_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ok" />
+</LinearLayout>
