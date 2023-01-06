@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onTouchClassificationView(v: View, event: MotionEvent): Boolean {
         if (0 <= activeClass && activeClass < dataClasses.size) {
-            dataClasses[activeClass].add(event.getX().toDouble(), event.getY().toDouble())
+            dataClasses[activeClass].add(event.getX(), event.getY())
             viewClassification.invalidate()
         }
         return super.onTouchEvent(event)

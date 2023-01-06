@@ -7,11 +7,11 @@ class DataClass(var name: String, var label: LabelInfo, var color: Int) {
         const val DIMENSION = 2
     }
 
-    var points: DoubleArray = DoubleArray(1024 * DIMENSION)
+    var points: FloatArray = FloatArray(1024 * DIMENSION)
 
     var numPoints: Int = 0
 
-    fun add(x: Double, y: Double) {
+    fun add(x: Float, y: Float) {
         if ((numPoints + 1) * DIMENSION > points.size)
             points = Arrays.copyOf(points, (numPoints * 3 / 2 + 1) * DIMENSION)
         val offset = numPoints * DIMENSION

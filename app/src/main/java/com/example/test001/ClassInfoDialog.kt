@@ -54,7 +54,7 @@ class ClassInfoDialog(
             for (d in 0 until DataClass.DIMENSION) {
                 val statInfo = StatInfo()
                 for (i in d until data.numPoints * DataClass.DIMENSION + d step DataClass.DIMENSION)
-                    statInfo.add(data.points[i])
+                    statInfo.add(data.points[i].toDouble())
                 info += "\n" + getString(
                     R.string.classInfoDimension,
                     d,
