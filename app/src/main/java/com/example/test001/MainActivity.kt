@@ -13,8 +13,7 @@ import androidx.core.view.get
 import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
-    val dataClasses: MutableList<DataClass> = ArrayList()
-    var activeClass: Int = -1
+    var data: DataClassesInfo =  DataClassesInfo()
 
     lateinit var viewClassification: MyView
     lateinit var viewClasses: LinearLayout
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewClassification = findViewById(R.id.classificationView)
-        viewClassification.dataClasses = dataClasses;
+        viewClassification.data = data;
         viewClassification.setOnTouchListener(this::onTouchClassificationView)
 
         viewClasses = findViewById(R.id.classesContainer)
@@ -77,21 +76,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onPlusClassButton(view: View) {
-        if (activeClass >= 0) {
-            viewClasses[activeClass].background.colorFilter = makeColorFilter(
+        if (data.activeClass >= 0) {
+            viewClasses[data.activeClass].background.colorFilter = makeColorFilter(
                 ResourcesCompat.getColor(resources, R.color.unselected_class_background, null),
-                dataClasses[activeClass].color
+                data.classes[data.activeClass].color
             )
         }
 
-        activeClass = dataClasses.size
+        data.activeClass = data.classes.size
 
         val newClass = DataClass(
-            "Class" + dataClasses.size,
+            "Class " + data.classes.size,
             labelsWheel.next,
             colorsWheel.next
         )
-        dataClasses += newClass
+        data.classes += newClass
 
         val newButton = AppCompatButton(this)
         newButton.layoutParams = newClassBtn.layoutParams
@@ -108,37 +107,37 @@ class MainActivity : AppCompatActivity() {
 
         newButton.setOnLongClickListener(this::onClassProperties)
 
-        viewClasses.addView(newButton, dataClasses.size - 1)
+        viewClasses.addView(newButton, data.classes.size - 1)
     }
 
     private fun onClassSelect(it: View) {
         var clickIndex = -1
-        for (i in 0 until dataClasses.size) {
+        for (i in 0 until data.classes.size) {
             if (viewClasses[i] == it) {
                 clickIndex = i
                 break
             }
         }
-        if (clickIndex == activeClass || clickIndex < 0)
+        if (clickIndex == data.activeClass || clickIndex < 0)
             return
 
-        if (activeClass >= 0)
-            viewClasses[activeClass].background.colorFilter = makeColorFilter(
+        if (data.activeClass >= 0)
+            viewClasses[data.activeClass].background.colorFilter = makeColorFilter(
                 ResourcesCompat.getColor(resources, R.color.unselected_class_background, null),
-                dataClasses[activeClass].color
+                data.classes[data.activeClass].color
             )
 
-        activeClass = clickIndex
+        data.activeClass = clickIndex
 
-        viewClasses[activeClass].background.colorFilter = makeColorFilter(
+        viewClasses[data.activeClass].background.colorFilter = makeColorFilter(
             ResourcesCompat.getColor(resources, R.color.selected_class_background, null),
-            dataClasses[activeClass].color
+            data.classes[data.activeClass].color
         )
     }
 
     private fun onClassProperties(it: View): Boolean {
         var clickIndex = -1
-        for (i in 0 until dataClasses.size) {
+        for (i in 0 until data.classes.size) {
             if (viewClasses[i] == it) {
                 clickIndex = i
                 break
@@ -147,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         if (clickIndex < 0)
             return true
 
-        val classInfo = ClassInfoDialog(dataClasses[clickIndex],
+        val classInfo = ClassInfoDialog(data.classes[clickIndex],
             { onClassPropertiesOk(clickIndex) },
             { onClassPropertiesDelete(clickIndex) })
 
@@ -161,51 +160,51 @@ class MainActivity : AppCompatActivity() {
 
         val drawable = ResourcesCompat.getDrawable(
             resources,
-            dataClasses[clickIndex].label.iconId,
+            data.classes[clickIndex].label.iconId,
             null
         ) ?: return
 
         drawable.colorFilter = makeColorFilter(
             ResourcesCompat.getColor(
                 resources,
-                if (clickIndex == activeClass)
+                if (clickIndex == data.activeClass)
                     R.color.selected_class_background
                 else
                     R.color.unselected_class_background, null
             ),
-            dataClasses[clickIndex].color
+            data.classes[clickIndex].color
         )
         viewClasses[clickIndex].background = drawable
 
-        viewClasses[clickIndex].contentDescription = dataClasses[clickIndex].name
+        viewClasses[clickIndex].contentDescription = data.classes[clickIndex].name
     }
 
     private fun onClassPropertiesDelete(clickIndex: Int) {         // OnDelete class
         Log.i(classTag, "Delete Class[$clickIndex]")
         viewClasses.removeViewAt(clickIndex)
 
-        dataClasses.removeAt(clickIndex)
-        if (clickIndex < activeClass)
-            activeClass--
+        data.classes.removeAt(clickIndex)
+        if (clickIndex < data.activeClass)
+            data.activeClass--
 
-        if (clickIndex == activeClass) {
-            activeClass = min(activeClass, dataClasses.size - 1)
+        if (clickIndex == data.activeClass) {
+            data.activeClass = min(data.activeClass, data.classes.size - 1)
 
-            if (activeClass >= 0)
-                viewClasses[activeClass].background.colorFilter = makeColorFilter(
+            if (data.activeClass >= 0)
+                viewClasses[data.activeClass].background.colorFilter = makeColorFilter(
                     ResourcesCompat.getColor(
                         resources,
                         R.color.selected_class_background,
                         null
                     ),
-                    dataClasses[activeClass].color
+                    data.classes[data.activeClass].color
                 )
         }
     }
 
     private fun onTouchClassificationView(v: View, event: MotionEvent): Boolean {
-        if (0 <= activeClass && activeClass < dataClasses.size) {
-            dataClasses[activeClass].add(event.getX(), event.getY())
+        if (0 <= data.activeClass && data.activeClass < data.classes.size) {
+            data.classes[data.activeClass].add(event.getX(), event.getY())
             viewClassification.invalidate()
         }
         return super.onTouchEvent(event)

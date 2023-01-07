@@ -13,7 +13,7 @@ import android.view.View
  * TODO: document your custom view class.
  */
 class MyView : View {
-    var dataClasses: MutableList<DataClass>? = null
+    var data: DataClassesInfo? = null
         set(value) {
             field = value
         }
@@ -130,18 +130,19 @@ class MyView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (dataClasses == null)
+        if (data == null)
             return
-        val classes = dataClasses!!
+        val classes = data!!.classes
+        val activeClass = data!!.activeClass
 
         for (ci in 0 until classes.size) {
-            val dataClass = classes[ci]
-            val points = dataClass.points
-            val dim = DataClass.DIMENSION
-            for (i in 0 until dataClass.numPoints) {
-                val offset = i * dim
-                drawLabel(canvas, points[offset].toFloat(), points[offset + 1].toFloat(), ci)
-            }
+            if (ci == activeClass)
+                continue
+            drawClass(canvas, ci)
+        }
+
+        if (activeClass >= 0 && activeClass < classes.size) {
+            drawClass(canvas, activeClass)
         }
 
 //        // TODO: consider storing these as member variables to reduce
@@ -174,6 +175,16 @@ class MyView : View {
 //            )
 //            it.draw(canvas)
 //        }
+    }
+
+    fun drawClass(canvas: Canvas, classIndex: Int) {
+        val dataClass = data!!.classes[classIndex]
+        val points = dataClass.points
+        val dim = DataClass.DIMENSION
+        for (i in 0 until dataClass.numPoints) {
+            val offset = i * dim
+            drawLabel(canvas, points[offset], points[offset + 1], classIndex)
+        }
     }
 
     fun drawLabel(canvas: Canvas, x: Float, y: Float, ci: Int) {

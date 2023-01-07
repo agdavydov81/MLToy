@@ -32,8 +32,14 @@ class StatInfo {
         get() = sqrt(variance)
 
     fun add(value: Double) {
-        min = min(value, min)
-        max = max(value, max)
+        if (count == 0L) {
+            min = value
+            max = value
+        }
+        else {
+            min = min(value, min)
+            max = max(value, max)
+        }
         sum += value
         sumSq += value * value
         count++
