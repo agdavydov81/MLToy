@@ -23,6 +23,8 @@ class MyView : View {
 
     var newClassBtn: AppCompatButton? = null
 
+    var iconSize: Int = 0
+        private set
     var labelSize: Int = 0
         private set
 
@@ -190,9 +192,8 @@ class MyView : View {
 
         if (dataClass.label.iconBitmap == null) {
             if (labelSize <= 0) {
-//                labelSize = newClassBtn!!.width
-//@@@                labelSize = (newClassBtn!!.width + 1) / 2 // round halfUp
-                labelSize = 126 - 10 // @TODO: Wrong icon scaling
+                iconSize = newClassBtn!!.width
+                labelSize = (iconSize + 1) / 2
             }
 
             val iconResNullable = ResourcesCompat.getDrawable(
@@ -207,8 +208,7 @@ class MyView : View {
                 dataClass.color
             )
 
-            val bmp = iconRes.toBitmap(labelSize, labelSize, Bitmap.Config.ARGB_8888)
-            dataClass.label.iconBitmap = bmp
+            val bmp = iconRes.toBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888)
 
             val w = bmp.width
             val h = bmp.height
@@ -222,6 +222,8 @@ class MyView : View {
             }
 
             bmp.setPixels(pixels, 0, w, 0, 0, w, h)
+
+            dataClass.label.iconBitmap = Bitmap.createScaledBitmap(bmp, labelSize, labelSize, true)
         }
         val iconBitmap = dataClass.label.iconBitmap!!
         val labelSize2 = labelSize / 2.0f
