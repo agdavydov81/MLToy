@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         viewClasses = findViewById(R.id.classesContainer)
         newClassBtn = findViewById(R.id.buttonPlus)
+        viewClassification.newClassBtn = newClassBtn
     }
 
     fun onPlusClassButton(view: View) {
@@ -133,6 +134,8 @@ class MainActivity : AppCompatActivity() {
             ResourcesCompat.getColor(resources, R.color.selected_class_background, null),
             data.classes[data.activeClass].color
         )
+
+        viewClassification.invalidate()
     }
 
     private fun onClassProperties(it: View): Boolean {
@@ -177,6 +180,10 @@ class MainActivity : AppCompatActivity() {
         viewClasses[clickIndex].background = drawable
 
         viewClasses[clickIndex].contentDescription = data.classes[clickIndex].name
+
+        data.classes[clickIndex].label.iconBitmap = null
+
+        viewClassification.invalidate()
     }
 
     private fun onClassPropertiesDelete(clickIndex: Int) {         // OnDelete class
@@ -200,6 +207,8 @@ class MainActivity : AppCompatActivity() {
                     data.classes[data.activeClass].color
                 )
         }
+
+        viewClassification.invalidate()
     }
 
     private fun onTouchClassificationView(v: View, event: MotionEvent): Boolean {

@@ -1,13 +1,16 @@
 package com.example.test001
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.drawable.Drawable
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.get
 
 /**
  * TODO: document your custom view class.
@@ -17,6 +20,11 @@ class MyView : View {
         set(value) {
             field = value
         }
+
+    var newClassBtn: AppCompatButton? = null
+
+    var labelSize: Int = 0
+        private set
 
 
 //    private var _exampleString: String? = null // TODO: use a default from R.string...
@@ -179,16 +187,55 @@ class MyView : View {
 
     fun drawClass(canvas: Canvas, classIndex: Int) {
         val dataClass = data!!.classes[classIndex]
+
+        if (dataClass.label.iconBitmap == null) {
+            if (labelSize <= 0) {
+//                labelSize = newClassBtn!!.width
+//@@@                labelSize = (newClassBtn!!.width + 1) / 2 // round halfUp
+                labelSize = 126 - 10 // @TODO: Wrong icon scaling
+            }
+
+            val iconResNullable = ResourcesCompat.getDrawable(
+                resources,
+                dataClass.label.iconId,
+                null
+            )
+            val iconRes = iconResNullable!!
+
+            iconRes.colorFilter = MainActivity.makeColorFilter(
+                ResourcesCompat.getColor(resources, R.color.black, null),
+                dataClass.color
+            )
+
+            val bmp = iconRes.toBitmap(labelSize, labelSize, Bitmap.Config.ARGB_8888)
+            dataClass.label.iconBitmap = bmp
+
+            val w = bmp.width
+            val h = bmp.height
+            val pixels = IntArray(w * h)
+            bmp.getPixels(pixels, 0, w, 0, 0, w, h)
+
+            val colorBlackRgb = Color.BLACK and 0xFFFFFF
+            for (i in 0 until pixels.size) {
+                if ((pixels[i] and 0xFFFFFF) == colorBlackRgb)
+                    pixels[i] = Color.TRANSPARENT
+            }
+
+            bmp.setPixels(pixels, 0, w, 0, 0, w, h)
+        }
+        val iconBitmap = dataClass.label.iconBitmap!!
+        val labelSize2 = labelSize / 2.0f
+
         val points = dataClass.points
         val dim = DataClass.DIMENSION
         for (i in 0 until dataClass.numPoints) {
             val offset = i * dim
-            drawLabel(canvas, points[offset], points[offset + 1], classIndex)
+            canvas.drawBitmap(
+                iconBitmap,
+                points[offset] - labelSize2,
+                points[offset + 1] - labelSize2,
+                null
+            )
         }
-    }
-
-    fun drawLabel(canvas: Canvas, x: Float, y: Float, ci: Int) {
-        canvas.drawLine(x - 20, y - 20, x + 20, y + 20, paint)
-        canvas.drawLine(x + 20, y - 20, x - 20, y + 20, paint)
     }
 }

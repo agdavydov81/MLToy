@@ -1,3 +1,15 @@
 package com.example.test001
 
-class LabelInfo(val nameId: Int, val iconId: Int)
+import android.graphics.Bitmap
+
+class LabelInfo(nameId: Int, iconId: Int) {
+    val nameId: Int = nameId
+
+    var iconId: Int = iconId
+        set(value) {
+            field = value
+            iconBitmap = null
+        }
+
+    var iconBitmap: Bitmap? = null
+}
